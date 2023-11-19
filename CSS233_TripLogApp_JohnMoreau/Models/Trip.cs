@@ -30,7 +30,7 @@ namespace CSS233_TripLogApp_JohnMoreau.Models
         [Range(typeof(DateTime), "1/1/1900", "12/31/9999", ErrorMessage = "Date must be after 1/1/1900")]
         public DateTime EndDate { get; set; }
 
-        public string AccommdationPhone { get; set; } = string.Empty;
+        public string AccommodationPhone { get; set; } = string.Empty;
 
         public string AccommodationEmail { get; set; } = string.Empty;
 

@@ -1,8 +1,109 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@using Microsoft.AspNetCore.Html;
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@*
+* John Moreau
+* CSS233
+* 11/19/2023
+*@
+@model List<Trip>
+@{
+    // For getting a new sort order to pass to my backend controller so that the URL query matches the actual sort order >:|
+    string GetNextSortOrder(string sortOrder)
+    {
+
+        switch (sortOrder)
+        {
+            case "asc":
+                return "desc";
+            case "desc":
+                return "";
+            default:
+                return "asc";
+        }
+
+    }
+
+    // For getting the sort by value to pass to my backend controller so that the URL query will go away when I'm not sorting by anything
+    string GetSortBy(string sortBy, string sortOrder)
+    {
+
+        if (sortOrder == "") return "";
+
+        return sortBy;
+
+    }
+
+    HtmlString GetSpan(string sortBy, string sortOrder)
+    {
+        
+        if (sortBy != ViewBag.SortBy) return new HtmlString("<span class='sort - icon fas fa-sort' style='margin - left: 5px; '></span>");
+
+        switch (sortOrder)
+        {
+            case "asc":
+                return new HtmlString("<span class='sort-icon fas fa-arrow-up' style='margin-left: 5px;'></span>");
+            case "desc":
+                return new HtmlString( "<span class='sort-icon fas fa-arrow-down' style='margin-left: 5px;'></span>");
+            default:
+                return new HtmlString( "<span class='sort - icon fas fa-sort' style='margin - left: 5px; '></span>");
+        }
+    }
+}
+<div class="mt-2 mb-2">
+    <a class="text-decoration-none fw-bold " asp-controller="Home" asp-action="Add">Add Trip</a>
 </div>
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>
+                Destination
+                <a asp-controller="Home" asp-action="Index" asp-route-sortBy="@(GetSortBy("Destination", GetNextSortOrder(ViewBag.SortOrder ?? "")))" asp-route-sortOrder="@(GetNextSortOrder(ViewBag.SortOrder ?? ""))" class="sort-button">
+                    @(GetSpan("Destination", ViewBag.SortOrder ?? ""))
+                </a>
+            </th>
+            <th>
+                Start Date
+                <a asp-controller="Home" asp-action="Index" asp-route-sortBy="@(GetSortBy("StartDate", GetNextSortOrder(ViewBag.SortOrder ?? "")))" asp-route-sortOrder="@(GetNextSortOrder(ViewBag.SortOrder ?? ""))" class="sort-button">
+                    @(GetSpan("StartDate", ViewBag.SortOrder ?? ""))
+                </a>
+            </th>
+            <th>
+                End Date
+                <a asp-controller="Home" asp-action="Index" asp-route-sortBy="@(GetSortBy("EndDate", GetNextSortOrder(ViewBag.SortOrder ?? "")))" asp-route-sortOrder="@(GetNextSortOrder(ViewBag.SortOrder ?? ""))" class="sort-button">
+                    @(GetSpan("EndDate", ViewBag.SortOrder ?? ""))
+                </a>
+            </th>
+            <th>
+                Accommodations
+                <a asp-controller="Home" asp-action="Index" asp-route-sortBy="@(GetSortBy("Accommodations", GetNextSortOrder(ViewBag.SortOrder ?? "")))" asp-route-sortOrder="@(GetNextSortOrder(ViewBag.SortOrder ?? ""))" class="sort-button">
+                    @(GetSpan("Accommodations", ViewBag.SortOrder ?? ""))
+                </a>
+            </th>
+            <th>
+                Things To Do
+                <a asp-controller="Home" asp-action="Index" asp-route-sortBy="@(GetSortBy("ToDo", GetNextSortOrder(ViewBag.SortOrder ?? "")))" asp-route-sortOrder="@(GetNextSortOrder(ViewBag.SortOrder ?? ""))" class="sort-button">
+                    @(GetSpan("ToDo", ViewBag.SortOrder ?? ""))
+                </a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var trip in Model)
+        {
+            <tr>
+                <td>@trip.Destination</td>
+                <td>@trip.StartDate.ToString("d")</td>
+                <td>@trip.EndDate.ToString("d")</td>
+                <td>@trip.Accommodation<br>
+                    Phone: @trip.AccommodationPhone<br>
+                    Email: @trip.AccommodationEmail<br>
+                </td>
+                <td>
+                    @trip.Activity1 <br>
+                    @trip.Activity2 <br>
+                    @trip.Activity3 <br>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

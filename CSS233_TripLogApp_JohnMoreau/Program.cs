@@ -1,7 +1,15 @@
+using CSS233_TripLogApp_JohnMoreau.Models;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Add EF Core DI
+builder.Services.AddDbContext<TripContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("TripContext")));
 
 var app = builder.Build();
 

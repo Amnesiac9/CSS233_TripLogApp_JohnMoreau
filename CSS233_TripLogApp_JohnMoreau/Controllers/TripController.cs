@@ -179,7 +179,7 @@ namespace CSS233_TripLogApp_JohnMoreau.Controllers
                 Context.SaveChanges();
 
                 // Add success message for index to read
-                TempData["SuccessMessage"] = destination + " Successfully Added!";
+                TempData["SuccessMessage"] = "Trip to " + destination + " Added!";
             }
             else
             {
@@ -188,7 +188,7 @@ namespace CSS233_TripLogApp_JohnMoreau.Controllers
                 Context.Trips.Update(trip);
                 Context.SaveChanges();
 
-                TempData["SuccessMessage"] = destination + " Successfully Updated!";
+                TempData["SuccessMessage"] = "Trip to " + destination + " Updated!";
             }
 
 
@@ -208,11 +208,19 @@ namespace CSS233_TripLogApp_JohnMoreau.Controllers
         [HttpPost]
         public IActionResult Delete(Trip trip)
         {
+            TempData["SuccessMessage"] = "Trip to " + trip.Destination + " Removed.";
             Context.Trips.Remove(trip);
             Context.SaveChanges();
-            TempData["SuccessMessage"] = trip.Destination + " Successfully Removed.";
             return RedirectToAction("Index", "Home");
 
+        }
+
+        public IActionResult Cancel()
+        {
+            // Clear Temp Data
+            TempData.Clear();
+
+            return RedirectToAction("Index", "Home");
         }
     }
 

@@ -1,6 +1,4 @@
-﻿
-
-/*
+﻿/*
 * John Moreau
 * CSS233
 * 11/19/2023
@@ -12,9 +10,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CSS233_TripLogApp_JohnMoreau.Models
 {
-    public class Trip
+    public class TripPage1ViewModel
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
 
         [Required(ErrorMessage = "Please enter a Destination")]
         public string Destination { get; set; } = string.Empty;
@@ -30,16 +28,5 @@ namespace CSS233_TripLogApp_JohnMoreau.Models
         [Range(typeof(DateTime), "1/1/1900", "12/31/9999", ErrorMessage = "Date must be after 1/1/1900")]
         public DateTime EndDate { get; set; } = DateTime.Now.AddDays(7);
 
-        public string AccommodationPhone { get; set; } = string.Empty;
-
-        public string AccommodationEmail { get; set; } = string.Empty;
-
-        public string Activity1 { get; set; } = string.Empty;
-
-        public string Activity2 { get; set; } = string.Empty;
-
-        public string Activity3 { get; set; } = string.Empty;
-
-        public string? Slug => Destination?.Replace(' ', '-').ToLower();
     }
 }

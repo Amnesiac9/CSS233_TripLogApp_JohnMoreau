@@ -14,6 +14,10 @@
         <h1>My Trip Log</h1>
     </header>
     <main role="main" class="pb-3 container">
+        @if (!string.IsNullOrEmpty(@ViewBag.SubHeader) || !string.IsNullOrEmpty(@ViewBag.Action))
+        {
+        <h2 class="mt-2 mb-2">@ViewBag.Action @ViewBag.SubHeader</h2>
+        }
         @RenderBody()
     </main>
     <footer class="border-top footer text-muted ml-auto">

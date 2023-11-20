@@ -1,0 +1,26 @@
+﻿@*
+    * John Moreau
+    * CSS233
+    * 11/19/2023
+*@
+@model TripPage2ViewModel
+<form asp-controller="Trip" asp-action="Add2" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="AccommodationPhone" class="form-label">Phone Number</label>
+        <input asp-for="AccommodationPhone" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="AccommodationEmail" class="form-label">Email Address</label>
+        <input asp-for="AccommodationEmail" class="form-control">
+    </div>
+
+
+    <div class="mb-3">
+        <button type="submit" class="btn btn-dark">Next</button>
+        <a asp-controller="Home" asp-action="Index"
+           class="btn btn-light">Cancel</a>
+    </div>
+</form>

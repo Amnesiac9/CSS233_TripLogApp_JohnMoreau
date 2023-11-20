@@ -1,0 +1,13 @@
+﻿
+@model Trip
+<div class="mb-3 mt-3">
+    Do you really want to delete <strong>@Model?.Destination</strong>?
+</div>
+
+<form asp-controller="Trip" asp-action="Delete" method="post">
+
+    <input type="hidden" asp-for="Id" />
+
+    <button type="submit" class="btn btn-dark">Yes</button>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-light">Cancel</a>
+</form>

@@ -1,0 +1,32 @@
+﻿@*
+    * John Moreau
+    * CSS233
+    * 11/19/2023
+*@
+@model TripPage3ViewModel
+@{
+}
+<form asp-controller="Trip" asp-action="Add3" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="Activity1" class="form-label"></label>
+        <input asp-for="Activity1" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Activity2" class="form-label"></label>
+        <input asp-for="Activity2" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Activity3" class="form-label"></label>
+        <input asp-for="Activity3" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        <button type="submit" class="btn btn-dark">Save</button>
+        <a asp-controller="Home" asp-action="Index"
+           class="btn btn-light">Cancel</a>
+    </div>
+</form>

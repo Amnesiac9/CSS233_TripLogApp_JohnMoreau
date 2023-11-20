@@ -14,6 +14,8 @@ namespace CSS233_TripLogApp_JohnMoreau.Controllers
         public IActionResult Index(string sortBy, string sortOrder)
         {
 
+            TempData.Clear();
+
             var trips = Context.Trips;
 
             // Return early if SortOrder is empty to increase performance.

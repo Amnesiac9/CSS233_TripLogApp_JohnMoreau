@@ -49,8 +49,14 @@
         }
     }
 }
+@if (TempData.Keys.Contains("SuccessMessage"))
+{
+    <div class="mt-2 mb-2 alert alert-success" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
 <div class="mt-2 mb-2">
-    <a class="text-decoration-none fw-bold " asp-controller="Home" asp-action="Add">Add Trip</a>
+    <a class="text-decoration-none fw-bold " asp-controller="Trip" asp-action="Add">Add Trip</a>
 </div>
 <table class="table table-striped table-bordered">
     <thead>
@@ -85,6 +91,9 @@
                     @(GetSpan("ToDo", ViewBag.SortOrder ?? ""))
                 </a>
             </th>
+            <th>
+                Actions
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -102,6 +111,10 @@
                     @trip.Activity1 <br>
                     @trip.Activity2 <br>
                     @trip.Activity3 <br>
+                </td>
+                <td>
+                    <a class="" asp-controller="Trip" asp-action="Add" asp-route-id="@trip?.Id" asp-route-slug="@trip?.Slug">Edit</a>
+                    <a class="" asp-controller="Trip" asp-action="Delete" asp-route-id="@trip?.Id" asp-route-slug="@trip?.Slug">Delete</a>
                 </td>
             </tr>
         }

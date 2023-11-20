@@ -208,9 +208,10 @@ namespace CSS233_TripLogApp_JohnMoreau.Controllers
         [HttpPost]
         public IActionResult Delete(Trip trip)
         {
-            TempData["SuccessMessage"] = "Trip to " + trip.Destination + " Removed.";
+            
             Context.Trips.Remove(trip);
             Context.SaveChanges();
+            TempData["SuccessMessage"] = "Trip to " + trip.Destination + " Removed.";
             return RedirectToAction("Index", "Home");
 
         }

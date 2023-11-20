@@ -21,82 +21,126 @@ namespace CSS233_TripLogApp_JohnMoreau.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit()
+        public IActionResult Edit(int id)
         {
             ViewBag.Action = "Edit";
             ViewBag.SubHeader = "Trip Destination and Dates";
-        }
 
+            var trip = Context.Trips.Find(id);
 
-        [HttpPost]
-        public IActionResult Add1(TripPage1ViewModel trip)
-        {
-
-            if (trip == null || !ModelState.IsValid)
+            if (trip == null)
             {
-                ViewBag.SubHeader = "Add Trip Destination and Dates";
-
-                return View("Page1", trip ?? new TripPage1ViewModel());
+                return RedirectToAction("Index", "Home");
             }
 
             TempData["TripDestination"] = trip.Destination;
             TempData["TripAccommodation"] = trip.Accommodation;
             TempData["TripStartDate"] = trip.StartDate.ToString("d");
             TempData["TripEndDate"] = trip.EndDate.ToString("d");
+            TempData["TripAccommodationPhone"] = trip.AccommodationPhone;
+            TempData["TripAccommodationEmail"] = trip.AccommodationEmail;
+            TempData["TripActivity1"] = trip.Activity1;
+            TempData["TripActivity2"] = trip.Activity2;
+            TempData["TripActivity3"] = trip.Activity3;
 
 
 
-            ViewBag.SubHeader = "Add Info for " + trip.Accommodation;
-            return View("Page2", new TripPage2ViewModel());
 
+            return View("Page1", new TripPage1ViewModel(trip));
+        }
+
+
+        [HttpPost]
+        public IActionResult Add1(TripPage1ViewModel trip1)
+        {
+            ViewBag.Action = (trip1?.Id == 0) ? "Add" : "Edit";
+
+            if (trip1 == null || !ModelState.IsValid)
+            {
+                
+                ViewBag.SubHeader = "Trip Destination and Dates";
+
+                return View("Page1", trip1 ?? new TripPage1ViewModel());
+            }
+
+            // Set Temp Data
+            TempData["TripDestination"] = trip1.Destination;
+            TempData["TripAccommodation"] = trip1.Accommodation;
+            TempData["TripStartDate"] = trip1.StartDate.ToString("d");
+            TempData["TripEndDate"] = trip1.EndDate.ToString("d");
+
+
+            // Set Shared Subheader
+            ViewBag.SubHeader = "Info for " + trip1.Accommodation;
+           
+            // If id is 0, this is an ADD, return basic new TripPage2ViewModel
+            if (trip1.Id == 0)
+            {
+                return View("Page2", new TripPage2ViewModel());
+            }
+
+            // If we can find the ID, pass the trip to TripPage2ViewModel constructor and page two.
+            var trip = Context.Trips.Find(trip1.Id);
+            if (trip == null) {
+                return View("Page1", trip1 ?? new TripPage1ViewModel());
+            }
+
+
+            return View("Page2", new TripPage2ViewModel(trip));
 
         }
 
         [HttpPost]
         public IActionResult Add2(TripPage2ViewModel trip2)
         {
+            ViewBag.Action = (trip2?.Id == 0) ? "Add" : "Edit";
 
             if (trip2 == null || !ModelState.IsValid)
             {
-                ViewBag.SubHeader = "Add Trip Destination and Dates";
+                ViewBag.SubHeader = "Trip Destination and Dates";
 
                 return View("Page1", new TripPage1ViewModel());
             }
 
+            // Set Temp Data
             TempData["TripAccommodationPhone"] = trip2.AccommodationPhone;
             TempData["TripAccommodationEmail"] = trip2.AccommodationEmail;
 
+            // Set Shared SubHeader
             var destination = TempData.Peek("TripDestination");
+            ViewBag.SubHeader = "Things To Do in " + destination;
 
-            ViewBag.SubHeader = "Add Things To Do in " + destination;
 
-            return View("Page3", new TripPage3ViewModel());
+            if (trip2.Id == 0)
+            {
+                return View("Page3", new TripPage3ViewModel());
+            }
+
+            // If we can find the ID, pass the trip to ViewModel constructor and next Page.
+            var trip = Context.Trips.Find(trip2.Id);
+            if (trip == null)
+            {
+                ViewBag.SubHeader = "Info for " + trip?.Accommodation ?? "Unknown";
+                return View("Page2", trip2 ?? new TripPage2ViewModel());
+            }
+
+            return View("Page3", new TripPage3ViewModel(trip));
 
         }
 
         [HttpPost]
         public IActionResult Add3(TripPage3ViewModel trip3)
         {
+            ViewBag.Action = (trip3?.Id == 0) ? "Add" : "Edit";
 
             if (trip3 == null || !ModelState.IsValid)
             {
-                ViewBag.SubHeader = "Add Trip Destination and Dates";
+                ViewBag.SubHeader = "Trip Destination and Dates";
 
                 return View("Page1", new TripPage1ViewModel());
             }
 
-            //var trip1 = TempData["trip1"] as TripPage1ViewModel;
-            //var trip2 = TempData["trip2"] as TripPage2ViewModel;
-
-            //if (trip1 == null || trip2 == null)
-            //{
-            //    Console.WriteLine("trip1 or trip2 not found in TempData");
-            //    return View("Page1", trip1 ?? new TripPage1ViewModel());
-            //}
-
-
-            // Add success message for index to read
-
+            
             var destination = TempData["TripDestination"]?.ToString() ?? "";
 
             // Add data to a trip object
@@ -128,11 +172,25 @@ namespace CSS233_TripLogApp_JohnMoreau.Controllers
             //    Activity3 = trip3.Activity3
             //};
 
-            // Add the new trip to our database
-            Context.Trips.Add(trip);
-            Context.SaveChanges();
+            if (trip3.Id == 0)
+            {
+                // Add the new trip to our database
+                Context.Trips.Add(trip);
+                Context.SaveChanges();
 
-            TempData["SuccessMessage"] = destination + " Successfully Added!";
+                // Add success message for index to read
+                TempData["SuccessMessage"] = destination + " Successfully Added!";
+            }
+            else
+            {
+                trip.Id = trip3.Id ?? 0;
+                // Update the trip in our database
+                Context.Trips.Update(trip);
+                Context.SaveChanges();
+
+                TempData["SuccessMessage"] = destination + " Successfully Updated!";
+            }
+
 
             // Redirect to home
             return RedirectToAction("Index", "Home");
@@ -144,10 +202,6 @@ namespace CSS233_TripLogApp_JohnMoreau.Controllers
         {
             var trip = Context.Trips.Find(id);
             return View(trip);
-
-
-
-
         }
 
 

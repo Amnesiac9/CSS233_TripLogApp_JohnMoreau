@@ -12,7 +12,7 @@ namespace CSS233_TripLogApp_JohnMoreau.Models
 {
     public class TripPage1ViewModel
     {
-        //public int Id { get; set; }
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "Please enter a Destination")]
         public string Destination { get; set; } = string.Empty;
@@ -27,6 +27,20 @@ namespace CSS233_TripLogApp_JohnMoreau.Models
         [Required(ErrorMessage = "Please enter a End Date")]
         [Range(typeof(DateTime), "1/1/1900", "12/31/9999", ErrorMessage = "Date must be after 1/1/1900")]
         public DateTime EndDate { get; set; } = DateTime.Now.AddDays(7);
+
+        //Default constructor
+        public TripPage1ViewModel()
+        {
+        }
+
+        // Constructor for edit path
+        public TripPage1ViewModel(Trip trip) {
+            this.Id = trip.Id;
+            this.Destination = trip.Destination;
+            this.Accommodation = trip.Accommodation;
+            this.StartDate = trip.StartDate;
+            this.EndDate = trip.EndDate;
+        }
 
     }
 }
